@@ -1,12 +1,14 @@
+import type { CSSProperties } from 'react'
+
 const CHARACTERS = [
-  { id: 'slime', label: 'Slime', className: 'char--slime', delay: '0s' },
-  { id: 'mushroom', label: 'Mushroom', className: 'char--mushroom', delay: '0.4s' },
-  { id: 'ghost', label: 'Ghost', className: 'char--ghost', delay: '0.8s' },
-  { id: 'robot', label: 'Robot', className: 'char--robot', delay: '1.2s' },
-  { id: 'cat', label: 'Cat hero', className: 'char--cat', delay: '0.2s' },
-  { id: 'bird', label: 'Pixel bird', className: 'char--bird', delay: '1s' },
-  { id: 'knight', label: 'Tiny knight', className: 'char--knight', delay: '0.6s' },
-  { id: 'blob', label: 'Star blob', className: 'char--blob', delay: '1.4s' },
+  { id: 'slime', label: 'Slime', className: 'char--slime', motion: 'bob' },
+  { id: 'mushroom', label: 'Mushroom', className: 'char--mushroom', motion: 'bounce' },
+  { id: 'ghost', label: 'Ghost', className: 'char--ghost', motion: 'drift' },
+  { id: 'robot', label: 'Robot', className: 'char--robot', motion: 'wobble' },
+  { id: 'cat', label: 'Cat hero', className: 'char--cat', motion: 'hop' },
+  { id: 'bird', label: 'Pixel bird', className: 'char--bird', motion: 'flap' },
+  { id: 'knight', label: 'Tiny knight', className: 'char--knight', motion: 'jiggle' },
+  { id: 'blob', label: 'Star blob', className: 'char--blob', motion: 'spinbob' },
 ]
 
 function CharacterSprite({ type }: { type: string }) {
@@ -105,13 +107,18 @@ export function Hero() {
     <section className="hero" id="top">
       <div className="hero__atmosphere" aria-hidden="true" />
       <div className="hero__grid" aria-hidden="true" />
+      <div className="hero__sparkles" aria-hidden="true">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <span key={i} className="hero__spark" style={{ '--i': i } as CSSProperties} />
+        ))}
+      </div>
 
       <div className="hero__chars" aria-hidden="true">
-        {CHARACTERS.map((c) => (
+        {CHARACTERS.map((c, i) => (
           <div
             key={c.id}
-            className={`hero__char ${c.className}`}
-            style={{ animationDelay: c.delay }}
+            className={`hero__char ${c.className} hero__char--${c.motion}`}
+            style={{ animationDelay: `${i * 0.18}s` }}
             title={c.label}
           >
             <CharacterSprite type={c.id} />
@@ -120,26 +127,32 @@ export function Hero() {
       </div>
 
       <div className="hero__content">
-        <p className="hero__brand">TALOS</p>
+        <p className="hero__brand pixel-title">
+          <span className="pixel-title__glint" aria-hidden="true" />
+          TALOS
+        </p>
         <h1 className="hero__quote">
-          “Opportunities don&apos;t happen.
-          <span> You create them.”</span>
+          <span className="quote-mark" aria-hidden="true">◆</span>
+          Opportunities don&apos;t happen.
+          <span className="hero__quote-accent"> You create them.</span>
+          <span className="quote-mark" aria-hidden="true">◆</span>
         </h1>
         <p className="hero__attr">— Chris Grosser</p>
         <p className="hero__lede">
-          Principal game designer & developer — systems, feel, and shipped worlds for studios across US, Japan, and Europe.
+          Principal game designer & developer — systems, feel, and shipped worlds.
         </p>
         <div className="hero__cta">
-          <a className="btn btn--primary" href="#projects">
-            View projects
+          <a className="btn btn--primary btn--press" href="#projects">
+            <span>View projects</span>
           </a>
-          <a className="btn btn--ghost" href="#contact">
-            Start a conversation
+          <a className="btn btn--ghost btn--press" href="#contact">
+            <span>Start a conversation</span>
           </a>
         </div>
       </div>
 
       <div className="hero__scroll" aria-hidden="true">
+        <span className="hero__scroll-arrow">▼</span>
         <span>SCROLL</span>
       </div>
     </section>
